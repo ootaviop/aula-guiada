@@ -1,0 +1,2 @@
+>> Notei que será necessário criar uma interface compartilhada por todos os componentes da página para que eu consiga passar o parâmetro ativado ou não.
+    >> Isso servirá na hora que o vídeo entrar.
