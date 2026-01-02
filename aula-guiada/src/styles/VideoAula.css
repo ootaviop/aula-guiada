@@ -4,6 +4,8 @@
     background-repeat: no-repeat;
     background-size: contain;
     height: 200px;
+    position: fixed;
+    top: 3rem;
 }
 
 .container-video{

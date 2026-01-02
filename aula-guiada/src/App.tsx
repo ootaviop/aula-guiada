@@ -30,6 +30,14 @@ function App() {
           />
 
           <Paragraph
+            text='O segundo tópico apresenta para o Mentorado(a) o decreto que estabelece as competências gerais e específicas da SEE e sua estrutura organizacional. O Decreto nº 48.709, de 26 de outubro de 2023, '
+          />
+
+          <Paragraph
+            text='Neste tópico, o foco principal está nos artigos 2º, 3º e 4º do decreto. Para que vocês o entendam bem e possam apoiar os seus grupos, recomendamos que escutem o podcast que aprofunda o tema e aborda, especialmente, o artigo 2º do Decreto 48.709/23. Essa é a segunda tarefa do(a) Mentorado(a) durante seu processo formativo.'
+          />
+
+          <Paragraph
             text='Além de estar disponível para o(a) Mentorado(a), colocamos o mesmo recurso aqui no espaço de vocês. Explorem, naveguem e conheçam cada detalhe dessa estrutura organizacional. Vocês também fazem parte dela e conhecê-la é fundamental para que compreendam a importância do papel de vocês neste projeto.'
           />
 

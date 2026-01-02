@@ -1,4 +1,14 @@
 .container-destaque{
-
     padding: 1rem;
+    border: 1px dashed red;
+}
+
+.container-destaque .header{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.container-destaque .header h3{
+    margin: 0;
 }
