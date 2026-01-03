@@ -1,8 +1,11 @@
 
 import '../styles/Page.css'
 
+interface PageProps {
+    children: React.ReactNode;
+}
 
-export default function Page({ children }: any) {
+export const Page = ({ children }: PageProps) => {
 
     return (
         <>
@@ -13,3 +16,8 @@ export default function Page({ children }: any) {
         </>
     )
 }
+
+export default Page;
+
+
+

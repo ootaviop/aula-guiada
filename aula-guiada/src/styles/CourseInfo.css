@@ -1,0 +1,17 @@
+.course-info{
+    display: flex;
+        justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.course-info .description h2,
+.course-info .description h5{
+    margin: 0;
+}
+
+.course-info svg{
+    border: 1px solid white;
+    border-radius: 50%;
+    padding: .7rem;
+}

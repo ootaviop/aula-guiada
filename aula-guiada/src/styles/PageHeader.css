@@ -1,0 +1,14 @@
+.page-header-content{
+    box-sizing: border-box;
+    display: flex;
+    background-color: #1b294b;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    height: 70px;
+}
+
+.page-header-content .left{
+    display: flex;
+    gap: 1rem;
+}

@@ -1,6 +1,45 @@
-@ Componentes
+# Tarefas
 
-[x] - Títulos (H1-H6)
-[x] - Parágrafos
-[ ] - Destaque Atenção
-[ ] - Citação
+
+[ ] - Prototipar a seção do Header da aula.
+
+    [x] - <Page />
+
+        [x] - <PageHeader/>
+            
+            [x] - <BackBtn />
+            
+            [x] - <CourseInfo />
+                [x] - <IconBook />
+                [ ] - <Hint />
+                [ ] - <Title />
+              
+            [ ] - <Conclusion />
+                [ ] - <p></p>
+                [ ] - <ConclusionBar />
+                [ ] - <span></span>
+
+        [ ] - <PageBody />
+
+            [ ] - <VideoSection /> 
+
+                [ ] - <MyVideo /> 
+
+            [ ] - <TextSection />
+
+                [ ] - <Hint />
+                [ ] - <Paragraph />
+         
+         
+
+[ ] - Prototipar a seção do Body da aula.
+
+
+-----------------------
+
+
+# <PageHeader/>
+
+    [x] - Definir altura fixa para esse elemento.
+    [x] - Englobar <BackBtn> e <CourseInfo> em uma div.
+    [x] - Aplicar justify-content: space-between em <PageHeader> para posicionar corretamente os elementos.
