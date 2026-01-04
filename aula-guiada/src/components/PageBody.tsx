@@ -1,9 +1,13 @@
 import '../styles/PageBody.css'
 
-export default function PageBody() {
+type PageBodyProps = {
+    children: React.ReactNode
+}
+
+export default function PageBody({ children }: PageBodyProps) {
     return (
             <>
-             <div className="page-body"></div>
+             <div className="page-body">{children}</div>
             </>
     )
 }

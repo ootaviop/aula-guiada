@@ -1,11 +1,11 @@
 
 import '../styles/Page.css'
 
-interface PageProps {
+type PageProps = {
     children: React.ReactNode;
 }
 
-export const Page = ({ children }: PageProps) => {
+const Page = ({ children }: PageProps) => {
 
     return (
         <>

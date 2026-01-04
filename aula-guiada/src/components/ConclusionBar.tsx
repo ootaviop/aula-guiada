@@ -1,6 +1,6 @@
 import '../styles/ConclusionBar.css'
 
-export default function ConclusionBar() {
+const ConclusionBar = () => {
     return (
             <>
                 <div className="conclusion-bar">
@@ -9,3 +9,5 @@ export default function ConclusionBar() {
             </>
     )
 }
+
+export default ConclusionBar

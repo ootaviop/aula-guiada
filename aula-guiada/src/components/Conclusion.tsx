@@ -1,7 +1,7 @@
 import '../styles/Conclusion.css'
 import ConclusionBar from './ConclusionBar'
 
-export default function Conclusion() {
+const Conclusion = () => {
     return (
             <>
                 <div className="conclusion">
@@ -12,3 +12,5 @@ export default function Conclusion() {
             </>
     )
 }
+
+export default Conclusion
