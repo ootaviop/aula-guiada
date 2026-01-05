@@ -1,0 +1,16 @@
+.video{
+    width: clamp(100px, 300px , 400px);
+    background-image: url(../assets/WIN_20260102_16_32_56_Pro.jpg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 200px;
+    position: fixed;
+    top: 3rem;
+}
+
+.container-video{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}

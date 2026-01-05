@@ -1,0 +1,8 @@
+.page-body{
+    height: calc(100vh - 70px);
+    width: 100%;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    /* background-color: red; */
+     margin: 0 auto;
+}

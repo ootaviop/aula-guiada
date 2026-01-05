@@ -1,0 +1,73 @@
+# Tarefas
+
+
+[ ] - Prototipar a seção do Header da aula.
+
+    [x] - <Page />
+
+        [x] - <PageHeader/>
+            
+            [x] - <BackBtn />
+            
+            [x] - <CourseInfo />
+                [x] - <IconBook />
+                [ ] - <Hint />
+                [ ] - <Title />
+              
+            [ ] - <Conclusion />
+                [ ] - <p></p>
+                [ ] - <ConclusionBar />
+                [ ] - <span></span>
+
+        [ ] - <PageBody />
+
+            [ ] - <VideoSection /> 
+
+                [ ] - <MyVideo /> 
+
+            [ ] - <TextSection />
+
+                [ ] - <Hint />
+                [ ] - <Paragraph />
+         
+         
+
+[ ] - Prototipar a seção do Body da aula.
+
+
+-----------------------
+
+
+# <PageHeader/>
+
+    [x] - Definir altura fixa para esse elemento.
+    [x] - Englobar <BackBtn> e <CourseInfo> em uma div.
+    [x] - Aplicar justify-content: space-between em <PageHeader> para posicionar corretamente os elementos.E aí! 
+
+Bom, eu gostaria de trabalhar mais para deixar o header da minha aplicação exatamente como ele deve ser.
+Então:
+- alinhar direitinho
+- acertar os paddings da interface
+- juntar os paddings dentro do componente header
+- talvez trocar onde está o título de segurança do trabalho ali e tal
+- ao invés de ser título, colocar um spam
+- o progresso, a mesma coisa
+
+
+Pensando bem, aqui eu acho que ao invés de começar pelo header, eu posso muito bem continuar no page body. Ali, sabe, inserir o vídeo ali é inserir a coluna com os conteúdos, com os textos.
+
+Eu acho que assim, uma vez que eu fizer a estrutura desse page body, eu já vou conseguir usar os hooks pra deixar ativo ou inativo os textos, né? E a mesma coisa pra o progresso tal.
+
+Eu acho que vai me dar mais possibilidade de botar conteúdo em prática, botar o conceito em parte. 
+
+
+
+-----------------------------
+Afazeres para hj:
+
+[] - Inserir o vídeo na interface
+[] - Inserir a coluna com os parágrafos da aula.
+
+
+
+    
