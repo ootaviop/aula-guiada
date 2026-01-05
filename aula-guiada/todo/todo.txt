@@ -65,8 +65,8 @@ Eu acho que vai me dar mais possibilidade de botar conteúdo em prática, botar 
 -----------------------------
 Afazeres para hj:
 
-[] - Inserir o vídeo na interface
-[] - Inserir a coluna com os parágrafos da aula.
+[x] - Inserir o vídeo na interface
+[x] - Inserir a coluna com os parágrafos da aula.
 
 
 

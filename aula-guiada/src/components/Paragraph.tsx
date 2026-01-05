@@ -2,14 +2,16 @@
 import '../styles/Paragraph.css'
 
 interface ParagraphProps {
-    text: string;
+    children: string;
 }
 
-export default function Paragraph({ text }: ParagraphProps) {
+const Paragraph = ({ children }: ParagraphProps) => {
 
     return (
         <>
-            <p className='prg'>{text}</p>
+            <p className='prg'>{children}</p>
         </>
     )
 }
+
+export default Paragraph;
