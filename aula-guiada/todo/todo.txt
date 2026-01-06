@@ -70,4 +70,14 @@ Afazeres para hj:
 
 
 
-    
+----------------
+
+
+
+    Beleza, o que eu quero para o meu play?
+
+Quando a página carregar, inicialmente eu não quero que ele já tenha dado play. Eu quero que o usuário dê o primeiro play.
+
+Beleza, o usuário deu o play, ele vai assistir o conteúdo. Chegado em dado momento, em dado tempo, o vídeo principal ele tem que pausa. Vai trocar o vídeo principal para o vídeo da pergunta.
+
+Aí tem todo o vídeo da pergunta. Assim que o vídeo da pergunta terminar, ele já volta, troca de volta pro vídeo principal. 

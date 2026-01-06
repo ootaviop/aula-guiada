@@ -10,6 +10,11 @@ import TextSection from "./components/TextSection";
 import './styles/variables.css';
 
 function App() {
+  const videosList = [
+    "/src/assets/videos/video-aula.mp4",
+    "/src/assets/videos/video-aula2.mp4"
+  ];
+
   return (
     <>
       <Page>
@@ -22,7 +27,7 @@ function App() {
         </PageHeader>
 
         <PageBody >
-          <VideoSection />
+          <VideoSection videosList={videosList} />
           <TextSection />
         </PageBody>
       </Page>
