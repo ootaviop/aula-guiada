@@ -34,7 +34,7 @@ const VideoSection: React.FC = () => {
   const playerRef = useRef<videojs.Player | null>(null);
   const mySubject = useRef<string | null>(null);
   const myCheckpoint = useRef<number | null>(null);
-  const myNextQuestion = useRef<number>(-1);
+  const myNextQuestion = useRef<number>(1);
 
   const triggeredPoints = new Set();
 
@@ -45,7 +45,7 @@ const VideoSection: React.FC = () => {
     fluid: true,
     sources: [
       {
-        src: "/src/assets/videos/aula.mp4", 
+        src: "/src/assets/videos/aula.mp4",
         type: "video/mp4",
         id: "lessonVideo",
       },
@@ -53,19 +53,19 @@ const VideoSection: React.FC = () => {
         src: "/src/assets/videos/q1.mp4",
         type: "video/mp4",
         id: "question1",
-        insertTime: 3,
+        insertTime: 11.9,
       },
       {
         src: "/src/assets/videos/q2.mp4",
         type: "video/mp4",
         id: "question3",
-        insertTime: 5,
+        insertTime: 23,
       },
       {
         src: "/src/assets/videos/q3.mp4",
         type: "video/mp4",
         id: "question4",
-        insertTime: 7,
+        insertTime: 32,
       },
     ],
   };
@@ -73,11 +73,11 @@ const VideoSection: React.FC = () => {
   const stopPoints = videoOptions.sources
     .filter((source) => source.insertTime !== undefined)
     .map((source) => source.insertTime as number);
-    console.log(stopPoints);
+  console.log(stopPoints);
 
-   const getStopPoint = (time: number) => {
-        return stopPoints.find((stopTime) => stopTime === time);
-    };
+  const getStopPoint = (time: number) => {
+    return stopPoints.find((stopTime) => stopTime === time);
+  };
   // console.log(stopPoints);
 
   const handlePlayerReady = (player: any) => {
@@ -107,7 +107,8 @@ const VideoSection: React.FC = () => {
     });
 
     player.on("timeupdate", () => {
-      if (player.currentSrc().includes(videoOptions.sources[0].src)) { // Tomar cuidado aqui, pois quando o vídeo é local, o currentSrc retornará o caminho completo(com o localhost:3000/...) e aí se tentar comparar direto com o src, não vai bater. Por isso usei o includes.
+      if (player.currentSrc().includes(videoOptions.sources[0].src)) {
+        // Tomar cuidado aqui, pois quando o vídeo é local, o currentSrc retornará o caminho completo(com o localhost:3000/...) e aí se tentar comparar direto com o src, não vai bater. Por isso usei o includes.
         mySubject.current = "lesson";
         console.log(player.currentSrc());
       } else {
@@ -115,7 +116,8 @@ const VideoSection: React.FC = () => {
         console.log(player.currentSrc());
       }
 
-      const currentTime = Math.floor(player.currentTime()); // Arredondar em segundos
+      // const currentTime = Math.floor(player.currentTime()); // Arredondar em segundos
+      const currentTime = parseFloat(player.currentTime().toFixed(1)); // Uma casa decimal
       console.log("Current time: ", player.currentTime(), currentTime);
 
       // if (
@@ -126,26 +128,30 @@ const VideoSection: React.FC = () => {
       //   console.log("achou", currentTime);
       // }
 
-     console.log(mySubject);
-
-      if (
-        currentTime === getStopPoint(currentTime) &&
-        !triggeredPoints.has(getStopPoint(currentTime)) &&
-        mySubject.current === "lesson"
-      ) {
-        console.log("entroooooooou");
-        triggeredPoints.add(getStopPoint(currentTime) as number);
-        myCheckpoint.current = player.currentTime();
-        myNextQuestion.current = triggeredPoints.size;
-        player.pause();
-        player.src({
-          src: videoOptions.sources[myNextQuestion.current].src,
-          type: "video/mp4",
-        });
-        // Recarrega o vídeo, iniciando o carregamento do novo vídeo
-        player.load();
-        // Se quiser que o novo vídeo comece a tocar imediatamente após o load
-        player.play();
+      console.log(mySubject);
+      const nextSource = videoOptions.sources[myNextQuestion.current];
+      if (nextSource?.insertTime !== undefined) {
+        if (
+          currentTime >= nextSource.insertTime &&
+          currentTime < nextSource.insertTime + 1 &&
+          !triggeredPoints.has(nextSource.insertTime) &&
+          mySubject.current === "lesson"
+        ) {
+          triggeredPoints.add(
+            nextSource.insertTime as number,
+          );
+          myCheckpoint.current = player.currentTime();
+          player.pause();
+          player.src({
+            src: videoOptions.sources[myNextQuestion.current].src,
+            type: "video/mp4",
+          });
+          myNextQuestion.current = triggeredPoints.size + 1;
+          // Recarrega o vídeo, iniciando o carregamento do novo vídeo
+          player.load();
+          // Se quiser que o novo vídeo comece a tocar imediatamente após o load
+          player.play();
+        }
       }
 
       // if (currentTime === 6 && !triggeredPoints.has(6) && mySubject.current === 'question') {
