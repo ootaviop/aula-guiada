@@ -2,7 +2,12 @@
 
 // Um observador observa um "canal" e notifica os inscritos quando algo muda nesse canal.
 
-class ObserverModule {
+interface ObserverModuleTypes {
+  observers: Map<string | HTMLElement, Function[]>;
+}
+
+class ObserverModule implements ObserverModuleTypes {
+    observers: Map<string | HTMLElement, Function[]>;
   constructor() {
     // Usamos um Map para associar um "canal" a uma lista de "observadores" (funções)
     this.observers = new Map();
@@ -37,13 +42,16 @@ class ObserverModule {
    * @param {string|HTMLElement} channel - O identificador do que será observado.
    * @param {Function} callback - A função a ser executada quando o canal mudar.
    */
-  subscribeTo(channel, callback) {
+  subscribeTo({channel, callback} : {channel: string | HTMLElement; callback: Function}) {
     // Quem chama subscribeTo quer ser notificado quando algo mudar no "channel"
     if (!this.observers.has(channel)) {
         // Verifica se já existe um item do Map que possui aquele canal cadastrado. No caso de não existir, usa .set(channel, []) para instanciar um canal inicialmente sem nenhum callback associado.
       this.observers.set(channel, []); 
     }
-    this.observers.get(channel).push(callback);
+    const channelCallbacks = this.observers.get(channel);
+    if (channelCallbacks) {
+        channelCallbacks.push(callback);
+    }
     // Nesse momento, é seguro usar this.observers.get(channel) pois já é garantido que o canal existe no Map e já encontra-se pronto para receber as funções de callback que cada inscrito definiu. Nesse caso, é possível usar .push(callback) pois o valor usado para instanciar essa chave foi exatamente ´[]´ um array vazio. 
     // ## Veja a linha 41 ## 
   }
@@ -53,7 +61,7 @@ class ObserverModule {
    * @param {string|HTMLElement} channel - O canal que mudou.
    * @param {*} data - Dados opcionais sobre a mudança.
    */
-  sendNotify(channel, data) {
+  sendNotify({channel, data} : {channel: string | HTMLElement; data?: any}) {
     const callbacks = this.observers.get(channel);
     // Lista todas as funções de callback associadas com aquele canal, pelos próprios inscritos.
     if (callbacks) {
@@ -81,7 +89,7 @@ class ObserverModule {
    * Remove um observador específico.
    * Importante para evitar memory leaks!
    */
-  unsubscribeTo(channel, callbackToRemove) {
+  unsubscribeTo({channel, callbackToRemove} : {channel: string | HTMLElement; callbackToRemove: Function}) {
     if (!this.observers.has(channel)) return;
     // Se o Map não tiver o canal que o chamador de unsubscribeTo passou, já exita aqui mesmo, pois não haveria como remover callbacks de um canal que não existe.
     
@@ -105,5 +113,6 @@ class ObserverModule {
 
 // O padrão Singleton garante a existência de apenas uma única instância de uma classe em toda a aplicação, oferencendo um ponto de acesso global a ela. A classe controla sua própria instanciação, impedindo que outras classes criem novas instâncias. 
 
-export default new ObserverModule();
+const observerModuleInstance = new ObserverModule();
+export default observerModuleInstance;
 

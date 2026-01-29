@@ -1,22 +1,13 @@
-import React, { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import '../styles/VideoAula.css'
+import type { VideoOptionsProps } from '../types/types'
 
-type VideoOptionsProps = {
-  autoplay: boolean;
-  controls: boolean;
-  responsive: boolean;
-  fluid: boolean;
-  sources: {
-    src: string;
-    type: string;
-  }[];
-};
 
-const VideoAula = ({ options, onReady } : { options: VideoOptionsProps, onReady?: (player: any) => void }) => {
-    const videoRef = React.useRef<HTMLDivElement | null>(null); // Armazenar uma referência ao elemento HTML que conterá a instância do player (???)
-    const playerRef = React.useRef<any | null>(null) // Armazenar a instância do player
+const VideoAula = ({ options, onReady } : { options: VideoOptionsProps, onReady?: (player: typeof videojs.players) => void }) => {
+    const videoRef = useRef<HTMLDivElement | null>(null); // Armazenar uma referência ao elemento HTML que conterá a instância do player (???)
+    const playerRef = useRef<typeof videojs.players | null>(null); // Armazenar a instância do player
 
     useEffect(() => { // Será executado na primeira renderização do componente e quando o valor de options ou videoRef mudar
         if (!playerRef.current) {

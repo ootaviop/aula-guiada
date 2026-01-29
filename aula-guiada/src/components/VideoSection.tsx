@@ -1,7 +1,11 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/VideoSection.css";
 import VideoAula from "./VideoAula";
 import type videojs from "video.js";
+import type { VideoOptionsProps } from "../types/types";
+import observerModuleInstance from "../modules/ObserverModule";
+
+
 
 /**
  * player.currentTime() - Retorna o tempo atual do vídeo em segundos.
@@ -14,154 +18,182 @@ import type videojs from "video.js";
  *
  */
 
-export type VideoOptionsProps = {
-  autoplay: boolean;
-  controls: boolean;
-  responsive: boolean;
-  fluid: boolean;
-  sources: {
-    src: string;
-    type: string;
-    id?: string;
-    insertTime?: number;
-  }[];
-};
+class VideoState {
+ 
+  state = {
+    isPlaying: false,
+    actualSrc: null as string | null,
+    subject: null as string | null,
+  }
 
-const VideoSection: React.FC = () => {
-  const playerRef = useRef<videojs.Player | null>(null);
-  const mySubject = useRef<string | null>(null);
+  setState(newState: Partial<typeof this.state>) {
+    this.state = { ...this.state, ...newState };
+    console.log(this.state);
+    // Notify observers about state change
+    Observer.notify("videoStateChange", this.state);
+  }
+  getState() {
+    return this.state;
+  }
+
+  init() {
+    this.state = {
+      isPlaying: false,
+      actualSrc: null,
+      subject: null,
+    };
+    Observer.subscribeTo("playingState", (data: { isPlaying: boolean }) => {
+      this.setState({ isPlaying: data.isPlaying });
+    });
+    Observer.subscribeTo("actualSrc", (data: { actualSrc: string }) => {
+      this.setState({ actualSrc: data.actualSrc });
+    });
+  }
+}
+
+const VideoSection = ({options} : {options: VideoOptionsProps}) => {
+  const playerRef = useRef<typeof videojs.players | null>(null);
+  // const [playerState, setPlayerState] = useState<string | null>(null);
+  const videoState = new VideoState();
+  const [actualSrc, setActualSrc] = useState<string | null>(null);
+  const [subject, setSubject] = useState<string | null>(null);
   const myCheckpoint = useRef<number | null>(null);
   const myNextQuestion = useRef<number>(1);
-
+  // const mySubject = useRef<string | null>(null);
+  
   const triggeredPoints = new Set();
 
-  const videoOptions: VideoOptionsProps = {
-    autoplay: false,
-    controls: true,
-    responsive: true,
-    fluid: true,
-    sources: [
-      {
-        src: "/src/assets/videos/aula.mp4",
-        type: "video/mp4",
-        id: "lessonVideo",
-      },
-      {
-        src: "/src/assets/videos/q1.mp4",
-        type: "video/mp4",
-        id: "question1",
-        insertTime: 11.9,
-      },
-      {
-        src: "/src/assets/videos/q2.mp4",
-        type: "video/mp4",
-        id: "question3",
-        insertTime: 23,
-      },
-      {
-        src: "/src/assets/videos/q3.mp4",
-        type: "video/mp4",
-        id: "question4",
-        insertTime: 32,
-      },
-    ],
-  };
 
-  const stopPoints = videoOptions.sources
-    .filter((source) => source.insertTime !== undefined)
-    .map((source) => source.insertTime as number);
-  console.log(stopPoints);
-
-  // const getStopPoint = (time: number) => {
-  //   return stopPoints.find((stopTime) => stopTime === time);
+  // const options: optionsProps = {
+  //   autoplay: false,
+  //   controls: true,
+  //   responsive: true,
+  //   fluid: true,
+  //   sources: [
+  //     {
+  //       src: "/src/assets/videos/aula.mp4",
+  //       type: "video/mp4",
+  //       id: "lessonVideo",
+  //     },
+  //     {
+  //       src: "/src/assets/videos/q1.mp4",
+  //       type: "video/mp4",
+  //       id: "question1",
+  //       insertTime: 11.9,
+  //     },
+  //     {
+  //       src: "/src/assets/videos/q2.mp4",
+  //       type: "video/mp4",
+  //       id: "question2",
+  //       insertTime: 23,
+  //     },
+  //     {
+  //       src: "/src/assets/videos/q3.mp4",
+  //       type: "video/mp4",
+  //       id: "question3",
+  //       insertTime: 32,
+  //     },
+  //   ],
   // };
-  // console.log(stopPoints);
+  // console.log(playerState, subject, actualSrc);
 
-  const handlePlayerReady = (player: any) => {
+  const stopPoints = (sources: VideoOptionsProps["sources"]) =>
+    sources
+      .filter((source) => source.insertTime !== undefined)
+      .map((source) => source.insertTime as number); 
+
+  const handlePlayerReady = (player: typeof videojs.players) => {
     playerRef.current = player;
-    console.log(player);
-    console.log(typeof player);
+    // console.log(player);
+    //console.log(typeof player);
 
     player.on("play", () => {
-      console.log(player.currentSrc());
+      Observer.notify("playingState", { isPlaying: true });
+      setActualSrc(player.currentSrc());
+      if (actualSrc?.includes(options.sources[0].src)) {
+        setSubject("lesson");
+      } else {
+        setSubject("question");
+      }
     });
 
     player.on("pause", () => {
-      console.log("Video paused");
+      Observer.notify("playingState", { isPlaying: false });
     });
 
-    player.on("ended", () => {
-      if (mySubject.current === "question") {
-        console.log("The question video ended. Resuming the lesson video.");
-        player.src({
-          src: videoOptions.sources[0].src,
-          type: "video/mp4",
-        });
-        player.load();
-        player.currentTime(myCheckpoint.current || 0);
-        player.play();
-      }
-    });
+    // player.on("ended", () => {
+    //   if (subject === "question") {
+    //     console.log("The question video ended. Resuming the lesson video.");
+    //     player.src({
+    //       src: options.sources[0].src,
+    //       type: "video/mp4",
+    //     });
+    //     player.load();
+    //     player.currentTime(myCheckpoint.current || 0);
+    //     player.play();
+    //   }
+    // });
 
-    player.on("timeupdate", () => {
-      if (player.currentSrc().includes(videoOptions.sources[0].src)) {
-        // Tomar cuidado aqui, pois quando o vídeo é local, o currentSrc retornará o caminho completo(com o localhost:3000/...) e aí se tentar comparar direto com o src, não vai bater. Por isso usei o includes.
-        mySubject.current = "lesson";
-        console.log(player.currentSrc());
-      } else {
-        mySubject.current = "question";
-        console.log(player.currentSrc());
-      }
+    // player.on("timeupdate", () => {
+    //   if (player.currentSrc().includes(options.sources[0].src)) {
+    //     // Tomar cuidado aqui, pois quando o vídeo é local, o currentSrc retornará o caminho completo(com o localhost:3000/...) e aí se tentar comparar direto com o src, não vai bater. Por isso usei o includes.
+    //     //console.log("aquiiiiii");
+    //     setSubject("lesson");
+    //     // console.log(player.currentSrc());
+    //   } else {
+    //     setSubject("question");
+    //     // console.log(player.currentSrc());
+    //   }
 
-      // const currentTime = Math.floor(player.currentTime()); // Arredondar em segundos
-      const currentTime = parseFloat(player.currentTime().toFixed(1)); // Uma casa decimal
-      console.log("Current time: ", player.currentTime(), currentTime);
+    //   // const currentTime = Math.floor(player.currentTime()); // Arredondar em segundos
+    //   const currentTime = parseFloat(player.currentTime().toFixed(1)); // Uma casa decimal
+    //   //console.log("Current time: ", player.currentTime(), currentTime);
 
-      // if (
-      //   currentTime === stopPoints.find((time) => time === currentTime) &&
-      //   !triggeredPoints.has(currentTime) &&
-      //   mySubject.current === "lesson"
-      // ) {
-      //   console.log("achou", currentTime);
-      // }
+    //   // if (
+    //   //   currentTime === stopPoints.find((time) => time === currentTime) &&
+    //   //   !triggeredPoints.has(currentTime) &&
+    //   //   mySubject.current === "lesson"
+    //   // ) {
+    //   //   console.log("achou", currentTime);
+    //   // }
 
-      console.log(mySubject);
-      const nextSource = videoOptions.sources[myNextQuestion.current];
-      if (nextSource?.insertTime !== undefined) {
-        if (
-          currentTime >= nextSource.insertTime &&
-          currentTime < nextSource.insertTime + 1 &&
-          !triggeredPoints.has(nextSource.insertTime) &&
-          mySubject.current === "lesson"
-        ) {
-          triggeredPoints.add(
-            nextSource.insertTime as number,
-          );
-          myCheckpoint.current = player.currentTime();
-          player.pause();
-          player.src({
-            src: videoOptions.sources[myNextQuestion.current].src,
-            type: "video/mp4",
-          });
-          myNextQuestion.current = triggeredPoints.size + 1;
-          // Recarrega o vídeo, iniciando o carregamento do novo vídeo
-          player.load();
-          // Se quiser que o novo vídeo comece a tocar imediatamente após o load
-          player.play();
-        }
-      }
+    //   //console.log(subject);
+    //   const nextSource = options.sources[myNextQuestion.current];
+    //   if (nextSource?.insertTime !== undefined) {
+    //     if (
+    //       currentTime >= nextSource.insertTime &&
+    //       currentTime < nextSource.insertTime + 1 &&
+    //       !triggeredPoints.has(nextSource.insertTime) &&
+    //       subject === "lesson"
+    //     ) {
+    //       triggeredPoints.add(
+    //         nextSource.insertTime as number,
+    //       );
+    //       myCheckpoint.current = player.currentTime();
+    //       player.pause();
+    //       player.src({
+    //         src: options.sources[myNextQuestion.current].src,
+    //         type: "video/mp4",
+    //       });
+    //       myNextQuestion.current = triggeredPoints.size + 1;
+    //       // Recarrega o vídeo, iniciando o carregamento do novo vídeo
+    //       player.load();
+    //       // Se quiser que o novo vídeo comece a tocar imediatamente após o load
+    //       player.play();
+    //     }
+    //   }
 
-      // if (currentTime === 6 && !triggeredPoints.has(6) && mySubject.current === 'question') {
-      //   console.log('6 segundos');
-      //   triggeredPoints.add(6);
-      // }
+    //   // if (currentTime === 6 && !triggeredPoints.has(6) && mySubject.current === 'question') {
+    //   //   console.log('6 segundos');
+    //   //   triggeredPoints.add(6);
+    //   // }
 
-      console.log("Triggered points: ", triggeredPoints);
-    });
+    //   //console.log("Triggered points: ", triggeredPoints);
+    // });
   };
   return (
     <>
-      <VideoAula options={videoOptions} onReady={handlePlayerReady} />
+      <VideoAula options={options} onReady={handlePlayerReady} />
     </>
   );
 };
