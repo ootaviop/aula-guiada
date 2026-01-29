@@ -6,7 +6,6 @@ import BackBtn from "./components/BackBtn";
 import CourseInfo from "./components/CourseInfo";
 import Conclusion from "./components/Conclusion";
 import VideoSection from "./components/VideoSection";
-import TextSection from "./components/TextSection";
 import './styles/variables.css';
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
 
         <PageBody >
           <VideoSection />
-          <TextSection />
         </PageBody>
       </Page>
     </>

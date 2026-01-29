@@ -1,4 +1,4 @@
-import { use, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import "../styles/VideoSection.css";
 import VideoAula from "./VideoAula";
 import type videojs from "video.js";
@@ -28,9 +28,6 @@ export type VideoOptionsProps = {
 };
 
 const VideoSection: React.FC = () => {
-  const [subject, setSubject] = useState<string | null>(null);
-  const [checkPoint, setCheckPoint] = useState(null);
-  const [nextQuestion, setNextQuestion] = useState(null);
   const playerRef = useRef<videojs.Player | null>(null);
   const mySubject = useRef<string | null>(null);
   const myCheckpoint = useRef<number | null>(null);
@@ -75,9 +72,9 @@ const VideoSection: React.FC = () => {
     .map((source) => source.insertTime as number);
   console.log(stopPoints);
 
-  const getStopPoint = (time: number) => {
-    return stopPoints.find((stopTime) => stopTime === time);
-  };
+  // const getStopPoint = (time: number) => {
+  //   return stopPoints.find((stopTime) => stopTime === time);
+  // };
   // console.log(stopPoints);
 
   const handlePlayerReady = (player: any) => {

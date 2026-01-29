@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import '../styles/VideoAula.css'
